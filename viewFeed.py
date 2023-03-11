@@ -43,8 +43,18 @@ def main(args):
     # read pre-trained model and config file
     net = cv2.dnn.readNet(args.weights, args.config)
 
+    # Only run the detection 
+    SKIP = 25
+    skipped = 0
+
     while(cap.isOpened()):
         ret, frame = cap.read()
+        if skipped < SKIP:
+            skipped += 1
+            continue
+        else:
+            skipped = 0
+
         image = frame[300:600, 1100:1600]
 
         Width = image.shape[1]
@@ -101,7 +111,7 @@ def main(args):
 
         # display the output image
         cv2.imshow("Image", image)
-        if cv2.waitKey(3000) & 0xFF == ord('q'):
+        if cv2.waitKey(1) & 0xFF == ord('q'):
            break
 
     cap.release()
